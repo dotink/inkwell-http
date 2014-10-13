@@ -2,6 +2,8 @@
 {
 	use Inkwell\HTTP;
 	use Inkwell\Transport\Resource;
+	use Dotink\Flourish\Collection;
+
 
 	class Response extends Resource\Response
 	{
@@ -30,6 +32,14 @@
 			500 => 'Internal Server Error',
 			503 => 'Unavailable'
 		];
+
+		public function __construct()
+		{
+			$this->setStatusCode(404);
+
+			$this->headers = new Collection();
+			$this->cookies = new HTTP\CookieCollection();
+		}
 
 
 		/**
