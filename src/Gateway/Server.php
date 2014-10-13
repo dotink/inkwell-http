@@ -3,6 +3,7 @@
 	use Inkwell\HTTP;
 	use Inkwell\Transport;
 	use Dotink\Flourish\Collection;
+	use Dotink\Flourish\URL;
 
 	class Server implements Transport\GatewayInterface
 	{
@@ -20,6 +21,7 @@
 			$request->setMethod($_SERVER['REQUEST_METHOD']);
 			$request->setProtocol($protocol);
 			$request->setVersion($version);
+			$request->setUrl(new URL());
 		}
 
 
@@ -30,6 +32,10 @@
 		{
 			$this->prepareCookies($response);
 			$this->prepareHeaders($response);
+
+			http_response_code($response->getStatusCode());
+
+			echo $response->getBody();
 		}
 
 
