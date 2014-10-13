@@ -1,0 +1,28 @@
+{
+	"name": "dotink/inkwell-http",
+	"description": "HTTP transport",
+	"keywords": ["http"],
+	"license": "AGPL 3.0",
+	"authors": [
+		{
+			"name": "Matthew J. Sahagian",
+			"email": "msahagian@dotink.org",
+			"role": "Lead Architect / Developer"
+		}
+	],
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "http://packages.dotink.org"
+		}
+	],
+	"require": {
+		"php": ">=5.4.0",
+		"dotink/flourish-core": "dev-master",
+		"dotink/flourish-collection": "dev-master",
+		"dotink/inkwell-transport": "dev-master"
+	},
+	"autoload": {
+		"classmap": ["src/"]
+	}
+}
