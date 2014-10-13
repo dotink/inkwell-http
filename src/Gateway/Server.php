@@ -11,13 +11,15 @@
 		 */
 		public function populate($request)
 		{
-			$request->headers = new Collection(getallheaders());
-			$request->params  = new Collection(array_merge($_GET, $_POST));
-			$request->cookies = new HTTP\CookieCollection($_COOKIE);
+			$request->headers         = new Collection(getallheaders());
+			$request->params          = new Collection(array_merge($_GET, $_POST));
+			$request->cookies         = new HTTP\CookieCollection($_COOKIE);
+
+			list($protocol, $version) = explode('/', $_SERVER['SERVER_PROTOCOL']);
 
 			$request->setMethod($_SERVER['REQUEST_METHOD']);
-			$request->setProtocol(substr($_SERVER['SERVER_PROTOCOL'], 0, strpos('/')));
-			$request->setVersion(substr($_SERVER['SERVER_PROTOCOL'], strpos('/') + 1));
+			$request->setProtocol($protocol);
+			$request->setVersion($version);
 		}
 
 
