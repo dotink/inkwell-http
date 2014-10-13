@@ -9,7 +9,7 @@
 		/**
 		 *
 		 */
-		public function populate(HTTP\Resource\Request $request)
+		public function populate($request)
 		{
 			$request->headers = new Collection(getallheaders());
 			$request->params  = new Collection(array_merge($_GET, $_POST));
@@ -24,7 +24,7 @@
 		/**
 		 *
 		 */
-		public function transport(HTTP\Resource\Response $response)
+		public function transport($response)
 		{
 			$this->prepareCookies($response);
 			$this->prepareHeaders($response);
