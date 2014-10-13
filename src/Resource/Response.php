@@ -3,7 +3,7 @@
 	use Inkwell\HTTP;
 	use Inkwell\Transport\Resource;
 
-	Class Response extends Resource\Response
+	class Response extends Resource\Response
 	{
 		use HTTP\Message;
 
