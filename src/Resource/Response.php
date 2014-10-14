@@ -13,29 +13,88 @@
 		/**
 		 *
 		 */
-		static protected $states = [
-			200 => 'Ok',
-			201 => 'Created',
-			202 => 'Accepted',
-			204 => 'No Content',
-			301 => 'Permanent Redirect',
-			302 => 'Found',
-			303 => 'See Other',
-			304 => 'Not Modified',
-			307 => 'Temporary Redirect',
-			400 => 'Bad Request',
-			401 => 'Not Authorized',
-			403 => 'Forbidden',
-			404 => 'Not Found',
-			405 => 'Not Allowed',
-			406 => 'Not Acceptable',
-			500 => 'Internal Server Error',
-			503 => 'Unavailable'
+		static protected $defaultStatus = NULL;
+
+
+		/**
+		 *
+		 */
+		static protected $messages = [
+
 		];
 
-		public function __construct()
+
+		/**
+		 *
+		 */
+		static protected $states = [
+			'Ok'                    => 200,
+			'Created'               => 201,
+			'Accepted'              => 202,
+			'No Content'            => 204,
+			'Permanent Redirect'    => 301,
+			'Found'                 => 302,
+			'See Other'             => 303,
+			'Not Modified'          => 304,
+			'Temporary Redirect'    => 307,
+			'Bad Request'           => 400,
+			'Not Authorized'        => 401,
+			'Forbidden'             => 403,
+			'Not Found'             => 404,
+			'Not Allowed'           => 405,
+			'Not Acceptable'        => 406,
+			'Internal Server Error' => 500,
+			'Unavailable'           => 503
+		];
+
+
+		/**
+		 *
+		 */
+		protected $status = NULL;
+
+
+		/**
+		 *
+		 */
+		protected $statusCode = NULL;
+
+
+		/**
+		 *
+		 */
+		static public function setDefaultStatus($status)
 		{
-			$this->setStatusCode(404);
+			static::$defaultStatus = $status;
+		}
+
+
+		/**
+		 *
+		 */
+		static public function addCode($state, $code)
+		{
+			static::$states[$state] = $code;
+		}
+
+
+		/**
+		 *
+		 */
+		static public function addMessage($state, $message)
+		{
+			static::$messages[$state] = $message;
+		}
+
+
+		/**
+		 *
+		 */
+		public function __construct($status = NULL)
+		{
+			if ($status === NULL) {
+				$this->setStatus(static::$defaultStatus);
+			}
 
 			$this->headers = new Collection();
 			$this->cookies = new HTTP\CookieCollection();
@@ -63,6 +122,19 @@
 		/**
 		 *
 		 */
+		public function getBody()
+		{
+			if ($this->body === NULL && isset(static::$messages[$this->status])) {
+				return static::$messages[$this->status];
+			}
+
+			return parent::getBody();
+		}
+
+
+		/**
+		 *
+		 */
 		public function getStatus()
 		{
 			return $this->status;
@@ -84,7 +156,9 @@
 		public function setStatus($status)
 		{
 			$this->status     = ucwords($status);
-			$this->statusCode = array_search($status, static::$states);
+			$this->statusCode = isset(static::$states[$status])
+				? static::$states[$status]
+				: FALSE;
 
 			if ($this->statusCode === FALSE) {
 				throw new Flourish\ProgrammerException(
@@ -101,9 +175,7 @@
 		public function setStatusCode($code)
 		{
 			$this->statusCode = $code;
-			$this->status     = isset(static::$states[$this->statusCode])
-				? static::$states[$this->statusCode]
-				: FALSE;
+			$this->status     = array_search($code, static::$states);
 
 			if ($this->status === FALSE) {
 				throw new Flourish\ProgrammerException(
