@@ -106,6 +106,10 @@
 		 */
 		public function checkStatus($status)
 		{
+			if (is_array($status)) {
+				return in_array($this->status, $status);
+			}
+
 			return $this->status == $status;
 		}
 
@@ -115,6 +119,10 @@
 		 */
 		public function checkStatusCode($code)
 		{
+			if (is_array($code)) {
+				return in_array($this->statusCode, $code);
+			}
+
 			return $this->statusCode == $code;
 		}
 
@@ -122,13 +130,13 @@
 		/**
 		 *
 		 */
-		public function getBody()
+		public function get()
 		{
-			if ($this->body === NULL && isset(static::$messages[$this->status])) {
+			if ($this->data === NULL && isset(static::$messages[$this->status])) {
 				return static::$messages[$this->status];
 			}
 
-			return parent::getBody();
+			return parent::get();
 		}
 
 
