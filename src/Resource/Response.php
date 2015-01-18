@@ -2,7 +2,7 @@
 {
 	use Inkwell\HTTP;
 	use Inkwell\Transport\Resource;
-	use Dotink\Flourish\Collection;
+	use Dotink\Flourish;
 
 
 	class Response extends Resource\Response
@@ -96,7 +96,7 @@
 				$this->setStatus(static::$defaultStatus);
 			}
 
-			$this->headers = new Collection();
+			$this->headers = new Flourish\Collection();
 			$this->cookies = new HTTP\CookieCollection();
 		}
 
