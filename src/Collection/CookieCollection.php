@@ -6,9 +6,13 @@
 
 	class CookieCollection extends Collection
 	{
-		public function get($name, $default = NULL)
+		public function get($name = NULL, $default = NULL)
 		{
 			$value = parent::get($name, $default);
+
+			if ($name === NULL) {
+				return $value;
+			}
 
 			return is_array($value)
 				? $value[0]
