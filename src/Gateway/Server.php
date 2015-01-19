@@ -12,8 +12,8 @@
 		 */
 		public function populate($request)
 		{
-			$request->headers         = new Collection(getallheaders());
-			$request->params          = new Collection(array_merge($_GET, $_POST));
+			$request->headers         = new Collection($this->getHeaders());
+			$request->params          = new Collection($this->getData());
 			$request->cookies         = new HTTP\CookieCollection($_COOKIE);
 
 			list($protocol, $version) = explode('/', $_SERVER['SERVER_PROTOCOL']);
@@ -28,6 +28,37 @@
 		/**
 		 *
 		 */
+		public function getData()
+		{
+			return array_merge($_GET, $_POST);
+		}
+
+
+		/**
+		 *
+		 */
+		public function getHeaders()
+		{
+			$headers = array();
+
+			foreach ($_SERVER as $name => $value) {
+				if (substr($name, 0, 5) == 'HTTP_') {
+					$header = substr($name, 5);
+					$header = str_replace('_', ' ', $header);
+					$header = strtolower($header);
+					$header = ucwords($header);
+					$header = str_replace(' ', '-', $header);
+
+					$headers[$header] = $value;
+				}
+			}
+
+			return $headers;
+		}
+
+		/**
+		 *
+		 */
 		public function transport($response)
 		{
 			$this->prepareCookies($response);
@@ -35,7 +66,21 @@
 
 			http_response_code($response->getStatusCode());
 
-			echo $response->get();
+			$content = $response->get();
+
+			if (is_object($content)) {
+				if (!is_callable([$content, 'compose'])) {
+					throw new Flourish\ProgrammerException(
+						'Cannot transport object of type "%s", must have compose()',
+						get_class($content)
+					);
+				}
+
+				echo $content->compose();
+
+			} else {
+				echo $content;
+			}
 		}
 
 
