@@ -1,6 +1,6 @@
 <?php
 
-	return Affinity\Action::create(['core', 'events'], function($app, $container) {
+	return Affinity\Action::create(['core', 'events'], function($app, $broker) {
 		foreach ($app['engine']->fetch('response', 'states') as $status => $data) {
 			if (isset($data['code'])) {
 				Inkwell\HTTP\Resource\Response::addCode($status, $data['code']);
