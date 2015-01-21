@@ -22,6 +22,7 @@
 		"imarc/opus": "dev-master",
 		"dotink/flourish-core": "dev-master",
 		"dotink/flourish-collection": "dev-master",
+		"dotink/flourish-url": "dev-master",
 		"dotink/inkwell-transport": "dev-master"
 	},
 	"autoload": {
