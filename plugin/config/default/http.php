@@ -16,7 +16,7 @@
 		// and are handled by the Request class.
 		//
 
-		'states' => [
+		'response_states' => [
 
 			//
 			// For additional information about when each one of these response codes should be
