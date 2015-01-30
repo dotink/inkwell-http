@@ -32,14 +32,13 @@
 		 */
 		public function set($name, $value = NULL, $expire = 0, $path = NULL, $domain = NULL, $secure = FALSE, $httponly = FALSE)
 		{
-			if ($value !== NULL) {
-				return parent::set($name, array_slice(func_get_args(), 1));
-			}
-
-			if (is_array($values = func_get_arg(0))) {
+			if ($value === NULL && is_array($values = func_get_arg(0))) {
 				foreach ($values as $name => $value) {
 					$this->set($name, $value);
 				}
+
+			} else {
+				parent::set($name, array_slice(func_get_args(), 1));
 			}
 
 			return $this;
