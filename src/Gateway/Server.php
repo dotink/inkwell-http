@@ -1,10 +1,8 @@
 <?php namespace Inkwell\HTTP\Gateway
 {
 	use Inkwell\Transport;
-	use Inkwell\HTTP\CookieCollection;
-	use Inkwell\HTTP\CookieWrapperInterface;
-	use Dotink\Flourish\Collection;
-	use Dotink\Flourish\URL;
+	use Inkwell\HTTP;
+	use Dotink\Flourish;
 
 	class Server implements Transport\GatewayInterface
 	{
@@ -17,7 +15,7 @@
 		/**
 		 *
 		 */
-		public function __construct(CookieWrapperInterface $cookie_wrapper = NULL)
+		public function __construct(HTTP\CookieWrapperInterface $cookie_wrapper = NULL)
 		{
 			$this->cookieWrapper = $cookie_wrapper;
 		}
@@ -28,16 +26,16 @@
 		 */
 		public function populate($request)
 		{
-			$request->headers = new Collection($this->getHeaders());
-			$request->params  = new Collection($this->getParams());
-			$request->cookies = new CookieCollection($this->getCookies());
+			$request->headers = new Flourish\Collection($this->getHeaders());
+			$request->params  = new Flourish\Collection($this->getParams());
+			$request->cookies = new HTTP\CookieCollection($this->getCookies());
 
 			list($protocol, $version) = explode('/', $_SERVER['SERVER_PROTOCOL']);
 
 			$request->setMethod($_SERVER['REQUEST_METHOD']);
 			$request->setProtocol($protocol);
 			$request->setVersion($version);
-			$request->setUrl(new URL());
+			$request->setUrl(new Flourish\URL());
 		}
 
 
@@ -126,7 +124,10 @@
 				settype($params, 'array');
 				array_unshift($params, $name);
 
-				if ($this->cookieWrapper) {
+				if ($params[1] === NULL) {
+					$params[2] = strtotime('-1 year');
+
+				} elseif ($this->cookieWrapper) {
 					$params[1] = $this->cookieWrapper->wrap($params[1]);
 				}
 
