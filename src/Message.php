@@ -1,6 +1,6 @@
 <?php namespace Inkwell\HTTP
 {
-	Trait Message
+	trait Message
 	{
 		/**
 		 *

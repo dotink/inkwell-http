@@ -1,32 +1,48 @@
 <?php namespace Inkwell\HTTP
 {
-	use Inkwell\HTTP;
-	use Inkwell\Transport;
 	use Dotink\Flourish\Collection;
 
 	class CookieCollection extends Collection
 	{
+		/**
+		 *
+		 */
 		public function get($name = NULL, $default = NULL)
 		{
-			$value = parent::get($name, $default);
+			if ($name !== NULL) {
+				$value = parent::get($name, $default);
 
-			if ($name === NULL) {
-				return $value;
+				return is_array($value)
+					? $value[0]
+					: $value;
 			}
 
-			return is_array($value)
-				? $value[0]
-				: $value;
+			$values = array();
+
+			foreach (array_keys(parent::get()) as $name) {
+				$values[$name] = $this->get($name, $default);
+			}
+
+			return $values;
 		}
 
 
+		/**
+		 *
+		 */
 		public function set($name, $value = NULL, $expire = 0, $path = NULL, $domain = NULL, $secure = FALSE, $httponly = FALSE)
 		{
 			if ($value !== NULL) {
-				$value = array_slice(func_get_args(), 1);
+				return parent::set($name, array_slice(func_get_args(), 1));
 			}
 
-			parent::set($name, $value);
+			if (is_array($values = func_get_arg(0))) {
+				foreach ($values as $name => $value) {
+					$this->set($name, $value);
+				}
+			}
+
+			return $this;
 		}
 	}
 }

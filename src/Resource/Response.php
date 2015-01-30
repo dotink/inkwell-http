@@ -2,12 +2,26 @@
 {
 	use Inkwell\HTTP;
 	use Inkwell\Transport\Resource;
+	use Inkwell\HTTP\CookieCollection;
+	use Dotink\Flourish\Collection;
 	use Dotink\Flourish;
 
 
 	class Response extends Resource\Response
 	{
 		use HTTP\Message;
+
+
+		/**
+		 *
+		 */
+		public $cookies = NULL;
+
+
+		/**
+		 *
+		 */
+		public $headers = NULL;
 
 
 		/**
@@ -90,14 +104,14 @@
 		/**
 		 *
 		 */
-		public function __construct($status = NULL)
+		public function __construct($status = NULL, Collection $headers = NULL, CookieCollection $cookies = NULL)
 		{
 			if ($status === NULL) {
 				$this->setStatus(static::$defaultStatus);
 			}
 
-			$this->headers = new Flourish\Collection();
-			$this->cookies = new HTTP\CookieCollection();
+			$this->headers = $headers ?: new Collection();
+			$this->cookies = $cookies ?: new CookieCollection();
 		}
 
 

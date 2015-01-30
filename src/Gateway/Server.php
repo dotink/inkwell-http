@@ -1,7 +1,8 @@
 <?php namespace Inkwell\HTTP\Gateway
 {
-	use Inkwell\HTTP;
 	use Inkwell\Transport;
+	use Inkwell\HTTP\CookieCollection;
+	use Inkwell\HTTP\CookieWrapperInterface;
 	use Dotink\Flourish\Collection;
 	use Dotink\Flourish\URL;
 
@@ -10,11 +11,26 @@
 		/**
 		 *
 		 */
+		private $cookieWrapper = NULL;
+
+
+		/**
+		 *
+		 */
+		public function __construct(CookieWrapperInterface $cookie_wrapper = NULL)
+		{
+			$this->cookieWrapper = $cookie_wrapper;
+		}
+
+
+		/**
+		 *
+		 */
 		public function populate($request)
 		{
-			$request->headers         = new Collection($this->getHeaders());
-			$request->params          = new Collection($this->getData());
-			$request->cookies         = new HTTP\CookieCollection($_COOKIE);
+			$request->headers = new Collection($this->getHeaders());
+			$request->params  = new Collection($this->getParams());
+			$request->cookies = new CookieCollection($this->getCookies());
 
 			list($protocol, $version) = explode('/', $_SERVER['SERVER_PROTOCOL']);
 
@@ -28,7 +44,24 @@
 		/**
 		 *
 		 */
-		public function getData()
+		public function getCookies()
+		{
+			$cookies = $_COOKIE;
+
+			if (isset($this->cookieWrapper)) {
+				foreach ($cookies as $name => $value) {
+					$cookies[$name] = $this->cookieWrapper->unwrap($value);
+				}
+			}
+
+			return $cookies;
+		}
+
+
+		/**
+		 *
+		 */
+		public function getParams()
 		{
 			return array_merge($_GET, $_POST);
 		}
@@ -92,6 +125,10 @@
 			foreach ($response->cookies as $name => $params) {
 				settype($params, 'array');
 				array_unshift($params, $name);
+
+				if ($this->cookieWrapper) {
+					$params[1] = $this->cookieWrapper->wrap($params[1]);
+				}
 
 				call_user_func_array('setcookie', $params);
 			}
