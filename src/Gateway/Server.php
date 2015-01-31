@@ -46,6 +46,10 @@
 		{
 			$cookies = $_COOKIE;
 
+			if (isset($cookies[session_name()])) {
+				unset($cookies[session_name()]);
+			}
+
 			if (isset($this->cookieWrapper)) {
 				foreach ($cookies as $name => $value) {
 					$cookies[$name] = $this->cookieWrapper->unwrap($value);
