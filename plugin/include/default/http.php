@@ -25,7 +25,7 @@
 		// Handle JSON Encoding Output
 		//
 
-		$app['events']->on('Router::actionComplete', function($action, $data) {
+		$app['events']->on('Router::end', function($action, $data) {
 			$response = $data['response'];
 
 			if ($response->headers->get('Content-Type') == 'application/json') {
