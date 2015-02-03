@@ -128,11 +128,15 @@
 				settype($params, 'array');
 				array_unshift($params, $name);
 
-				if ($params[1] === NULL) {
-					$params[2] = strtotime('-1 year');
+				if ($params['value'] === NULL) {
+					$params['expire'] = strtotime('-1 year');
 
 				} elseif ($this->cookieWrapper) {
-					$params[1] = $this->cookieWrapper->wrap($params[1]);
+					$params['value'] = $this->cookieWrapper->wrap($params['value']);
+				}
+
+				if ($params['path'] === NULL) {
+					$params['path'] = '/';
 				}
 
 				call_user_func_array('setcookie', $params);

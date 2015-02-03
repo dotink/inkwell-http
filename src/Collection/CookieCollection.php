@@ -38,7 +38,14 @@
 				}
 
 			} else {
-				parent::set($name, array_slice(func_get_args(), 1));
+				parent::set($name, [
+					'value'    => $value,
+					'expire'   => $expire,
+					'path'     => $path,
+					'domain'   => $domain,
+					'secure'   => $secure,
+					'httponly' => $httponly
+				]);
 			}
 
 			return $this;
