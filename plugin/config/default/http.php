@@ -75,6 +75,11 @@
 				'body' => 'The requested resource is not available in the accepted parameters'
 			],
 
+			HTTP\UNSUPPORTED_MIMETYPE => [
+				'code' => 415,
+				'body' => 'The requested media type is not supported for this resource'
+			],
+
 			HTTP\SERVER_ERROR => [
 				'code' => 500,
 				'body' => 'The requested resource is not available due to an internal error'
