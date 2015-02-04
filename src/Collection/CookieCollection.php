@@ -13,7 +13,7 @@
 				$value = parent::get($name, $default);
 
 				return is_array($value)
-					? $value[0]
+					? $value['value']
 					: $value;
 			}
 
