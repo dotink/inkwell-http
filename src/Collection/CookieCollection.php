@@ -12,7 +12,7 @@
 			if ($name !== NULL) {
 				$value = parent::get($name, $default);
 
-				return is_array($value)
+				return is_array($value) && isset($value['value'])
 					? $value['value']
 					: $value;
 			}
