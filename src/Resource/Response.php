@@ -107,7 +107,7 @@
 		public function __construct($status = NULL, Collection $headers = NULL, CookieCollection $cookies = NULL)
 		{
 			if ($status === NULL) {
-				$this->setStatus(static::$defaultStatus);
+				$this->setStatus(static::$defaultStatus ?: 'Not Found');
 			}
 
 			$this->headers = $headers ?: new Collection();
