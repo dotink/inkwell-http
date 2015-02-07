@@ -3,6 +3,8 @@
 	use Inkwell\HTTP;
 	use Inkwell\Transport\Resource;
 	use Inkwell\HTTP\CookieCollection;
+
+	use Dotink\Flourish\Url;
 	use Dotink\Flourish\Collection;
 
 	class Request extends Resource\Request
@@ -25,6 +27,12 @@
 		 *
 		 */
 		public $cookies = NULL;
+
+
+		/**
+		 *
+		 */
+		private $url = NULL;
 
 
 		/**
@@ -59,9 +67,18 @@
 		/**
 		 *
 		 */
+		public function getTarget()
+		{
+			return $this->getUrl()->getPath();
+		}
+
+
+		/**
+		 *
+		 */
 		public function getUrl()
 		{
-			return $this->getTarget();
+			return $this->url;
 		}
 
 
@@ -79,9 +96,22 @@
 		/**
 		 *
 		 */
-		public function setUrl($url)
+		public function setUrl(Url $url)
 		{
-			return $this->setTarget($url);
+			$this->url = $url;
+
+			return $this;
+		}
+
+
+		/**
+		 *
+		 */
+		public function setTarget($target)
+		{
+			$this->url = $this->getUrl()->modify(['path' => $target]);
+
+			return $this;
 		}
 	}
 }
