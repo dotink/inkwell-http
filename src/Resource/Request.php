@@ -59,11 +59,29 @@
 		/**
 		 *
 		 */
+		public function getUrl()
+		{
+			return $this->getTarget();
+		}
+
+
+		/**
+		 *
+		 */
 		public function  setMethod($method)
 		{
 			$this->method = strtoupper($method);
 
 			return $this;
+		}
+
+
+		/**
+		 *
+		 */
+		public function setUrl($url)
+		{
+			return $this->setTarget($url);
 		}
 	}
 }

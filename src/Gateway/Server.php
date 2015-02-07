@@ -4,7 +4,7 @@
 	use Inkwell\HTTP;
 	use Dotink\Flourish;
 
-	class Server implements Transport\GatewayInterface
+	class Server
 	{
 		/**
 		 *
@@ -24,7 +24,7 @@
 		/**
 		 *
 		 */
-		public function populate($request)
+		public function populate(HTTP\Resource\Request $request)
 		{
 			$request->headers = new Flourish\Collection($this->getHeaders());
 			$request->params  = new Flourish\Collection($this->getParams());
@@ -94,7 +94,7 @@
 		/**
 		 *
 		 */
-		public function transport($response)
+		public function transport(HTTP\Resource\Response $response)
 		{
 			$this->prepareCookies($response);
 			$this->prepareHeaders($response);

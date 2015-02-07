@@ -3,7 +3,7 @@
 	use Inkwell\HTTP;
 	use Inkwell\Transport;
 
-	class Client implements Transport\GatewayInterface
+	class Client
 	{
 		/**
 		 *
