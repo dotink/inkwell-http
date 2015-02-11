@@ -3,7 +3,7 @@
 	return Affinity\Action::create(['core', 'events'], function($app, $broker) {
 
 		//
-		// Boostrap response states and codes
+		// Boostrap HTTP response states and codes
 		//
 
 		foreach ($app['engine']->fetch('http', 'response_states') as $status => $data) {
@@ -20,35 +20,41 @@
 			$app['engine']->fetch('http', 'default_status', IW\HTTP\NOT_FOUND)
 		);
 
-		if (!$app->checkSAPI('cli', 'embed')) {
-			//
-			// Handle JSON Encoding Output
-			//
+		//
+		// If we're being accessed via CLI, we're done
+		//
 
-			$app['events']->on('Router::end', function($action, $data) {
-				$response = $data['response'];
-
-				if ($response->headers->get('Content-Type') == 'application/json') {
-						$response->set(json_encode($response->get()));
-				}
-			});
-
-			//
-			// Spin up our gateway and populate the request
-			//
-
-			$response = $broker->make('Inkwell\HTTP\Resource\Response');
-			$request  = $broker->make('Inkwell\HTTP\Resource\Request');
-			$gateway  = $broker->make('Inkwell\HTTP\Gateway\Server');
-
-			$gateway->populate($request);
-
-			//
-			// Set up providers
-			//
-
-			$app['gateway']  = $gateway;
-			$app['request']  = $request;
-			$app['response'] = $response;
+		if ($app->checkSAPI('cli', 'embed')) {
+			return;
 		}
+
+		//
+		// Handle JSON Encoding Output
+		//
+
+		$app['events']->on('Router::end', function($action, $data) {
+			$response = $data['response'];
+
+			if ($response->headers->get('Content-Type') == 'application/json') {
+					$response->set(json_encode($response->get()));
+			}
+		});
+
+		//
+		// Spin up our gateway and populate the request
+		//
+
+		$response = $broker->make('Inkwell\HTTP\Resource\Response');
+		$request  = $broker->make('Inkwell\HTTP\Resource\Request');
+		$gateway  = $broker->make('Inkwell\HTTP\Gateway\Server');
+
+		$gateway->populate($request);
+
+		//
+		// Set up providers
+		//
+
+		$app['gateway']  = $gateway;
+		$app['request']  = $request;
+		$app['response'] = $response;
 	});
