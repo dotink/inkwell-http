@@ -4,7 +4,7 @@
 	use Inkwell\Transport\Resource;
 	use Inkwell\HTTP\CookieCollection;
 
-	use Dotink\Flourish\Url;
+	use Dotink\Flourish\URL;
 	use Dotink\Flourish\Collection;
 
 	class Request extends Resource\Request
@@ -38,8 +38,9 @@
 		/**
 		 *
 		 */
-		public function __construct(Collection $headers = NULL, Collection $params = NULL, CookieCollection $cookies = NULL)
+		public function __construct(URL $url = NULL, Collection $headers = NULL, Collection $params = NULL, CookieCollection $cookies = NULL)
 		{
+			$this->url     = $url     ?: new Url();
 			$this->headers = $headers ?: new Collection();
 			$this->params  = $params  ?: new Collection();
 			$this->cookies = $cookies ?: new CookieCollection();
@@ -96,9 +97,9 @@
 		/**
 		 *
 		 */
-		public function setUrl(Url $url)
+		public function setUrl($url)
 		{
-			$this->url = $url;
+			$this->url = $this->url->modify($url);
 
 			return $this;
 		}

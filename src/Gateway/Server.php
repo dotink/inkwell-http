@@ -35,7 +35,6 @@
 			$request->setMethod($_SERVER['REQUEST_METHOD']);
 			$request->setProtocol($protocol);
 			$request->setVersion($version);
-			$request->setUrl(new Flourish\URL());
 		}
 
 
