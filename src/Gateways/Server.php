@@ -1,7 +1,7 @@
 <?php namespace Inkwell\HTTP\Gateway
 {
-	use Inkwell\Transport;
 	use Inkwell\HTTP;
+	use Inkwell\Transport;
 	use Dotink\Flourish;
 
 	class Server
@@ -28,6 +28,8 @@
 		{
 			$request->headers = new Flourish\Collection($this->getHeaders());
 			$request->params  = new Flourish\Collection($this->getParams());
+
+			$request->files   = new HTTP\FileCollection($this->getFiles());
 			$request->cookies = new HTTP\CookieCollection($this->getCookies());
 
 			list($protocol, $version) = explode('/', $_SERVER['SERVER_PROTOCOL']);
@@ -62,9 +64,20 @@
 		/**
 		 *
 		 */
+		public function getFiles()
+		{
+			return $this->fixFiles($_FILES);
+		}
+
+
+		/**
+		 *
+		 */
 		public function getParams()
 		{
-			return array_merge($_GET, $_POST);
+			parse_str(file_get_contents('php://input'), $input);
+
+			return array_merge($_GET, $_POST, $input ?: array());
 		}
 
 
@@ -115,6 +128,42 @@
 			} else {
 				echo $content;
 			}
+		}
+
+
+		/**
+		 *
+		 */
+		private function fixFiles($data)
+		{
+			if (!is_array($data)) {
+				return $data;
+			}
+
+			$files     = array();
+			$file_keys = ['error', 'name', 'type', 'tmp_name', 'size'];
+			$data_keys = array_keys($data);
+
+			if (count(array_diff($file_keys, $data_keys))) {
+				foreach ($data_keys as $name) {
+					$files[$name] = $this->fixFiles($data[$name]);
+				}
+
+			} elseif (!isset($data['name']) || !is_array($data['name'])) {
+				return $data;
+			}
+
+			foreach (array_keys($data['name']) as $name) {
+				$files[$name] = $this->fixFiles([
+					'name'     => $data['name'][$name],
+					'type'     => $data['type'][$name],
+					'size'     => $data['size'][$name],
+					'error'    => $data['error'][$name],
+					'tmp_name' => $data['tmp_name'][$name]
+				]);
+			}
+
+			return $files;
 		}
 
 
