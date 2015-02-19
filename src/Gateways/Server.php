@@ -149,18 +149,19 @@
 					$files[$name] = $this->fixFiles($data[$name]);
 				}
 
-			} elseif (!isset($data['name']) || !is_array($data['name'])) {
-				return $data;
-			}
+			} elseif (isset($data['name']) && is_array($data['name'])) {
+				foreach (array_keys($data['name']) as $name) {
+					$files[$name] = $this->fixFiles([
+						'name'     => $data['name'][$name],
+						'type'     => $data['type'][$name],
+						'size'     => $data['size'][$name],
+						'error'    => $data['error'][$name],
+						'tmp_name' => $data['tmp_name'][$name]
+					]);
+				}
 
-			foreach (array_keys($data['name']) as $name) {
-				$files[$name] = $this->fixFiles([
-					'name'     => $data['name'][$name],
-					'type'     => $data['type'][$name],
-					'size'     => $data['size'][$name],
-					'error'    => $data['error'][$name],
-					'tmp_name' => $data['tmp_name'][$name]
-				]);
+			} else {
+				return $data;
 			}
 
 			return $files;
