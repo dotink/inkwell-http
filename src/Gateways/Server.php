@@ -141,10 +141,12 @@
 			}
 
 			$files     = array();
-			$file_keys = ['error', 'name', 'type', 'tmp_name', 'size'];
+			$file_keys = ['error', 'name', 'size', 'tmp_name', 'type'];
 			$data_keys = array_keys($data);
 
-			if (count(array_diff($file_keys, $data_keys))) {
+			sort($data_keys);
+
+			if ($file_keys != $data_keys) {
 				foreach ($data_keys as $name) {
 					$files[$name] = $this->fixFiles($data[$name]);
 				}
@@ -163,6 +165,7 @@
 			} else {
 				return $data;
 			}
+
 
 			return $files;
 		}
