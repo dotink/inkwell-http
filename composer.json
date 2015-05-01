@@ -19,10 +19,10 @@
 	],
 	"require": {
 		"php": ">=5.4.0",
-		"imarc/opus": "dev-master",
-		"dotink/flourish-core": "dev-master",
-		"dotink/flourish-collection": "dev-master",
-		"dotink/flourish-url": "dev-master",
+		"imarc/opus": "^1.0.0",
+		"dotink/flourish-core": "^1.0.0",
+		"dotink/flourish-collection": "^1.0.0",
+		"dotink/flourish-url": "^1.0.0",
 		"dotink/inkwell-transport": "dev-master"
 	},
 	"autoload": {
