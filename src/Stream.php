@@ -3,6 +3,7 @@
 	use Dotink\Flourish;
 
 	use Psr\Http\Message\UriInterface;
+	use Psr\Http\Message\StreamInterface;
 
 	use RuntimeException;
 
@@ -14,13 +15,25 @@
 		/**
 		 *
 		 */
+		static protected $readableModes = ['r', 'r+', 'w+', 'w+b', 'a+', 'x+', 'c+'];
+
+
+		/**
+		 *
+		 */
+		static protected $writableModes = ['r+', 'w+', 'w+b', 'a+', 'x+', 'c+'];
+
+
+		/**
+		 *
+		 */
 		protected $resource;
 
 
 		/**
 		 *
 		 */
-		public function __construct($file, $mode = 'rw')
+		public function __construct($file, $mode = 'r+')
 		{
 			if (is_resource($file)) {
 				$this->resource = $file;
@@ -148,7 +161,7 @@
 				return NULL;
 			}
 
-			return $metadata[$key];
+			return $meta_data[$key];
 		}
 
 
@@ -177,7 +190,7 @@
 				return FALSE;
 			}
 
-			return in_array($this->getMetadata('mode'), ['r', 'r+', 'w+', 'a+', 'x+', 'c+']);
+			return in_array($this->getMetadata('mode'), static::$readableModes);
 		}
 
 
@@ -201,7 +214,7 @@
 				return FALSE;
 			}
 
-			return is_writable($this->getMetadata('uri'));
+			return in_array($this->getMetadata('mode'), static::$writableModes);
 		}
 
 

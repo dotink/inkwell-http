@@ -152,6 +152,15 @@
 		/**
 		 *
 		 */
+		public function getReasonPhrase()
+		{
+
+		}
+
+
+		/**
+		 *
+		 */
 		public function getStatus()
 		{
 			return $this->status;
@@ -200,6 +209,15 @@
 					$code
 				);
 			}
+		}
+
+
+		/**
+		 *
+		 */
+		public function withStatus($code, $reason_phrase = '')
+		{
+
 		}
 	}
 }

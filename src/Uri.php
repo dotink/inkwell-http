@@ -2,12 +2,14 @@
 {
 	use Dotink\Flourish;
 
+	use Psr\Http\Message\UriInterface;
+
 	use InvalidArgumentException;
 
 	/**
 	 *
 	 */
-	class Uri extends Flourish\Url implements UriInterface
+	class URI extends Flourish\URL implements UriInterface
 	{
 		/**
 		 * Get an instance with the specified URI fragment.

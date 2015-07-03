@@ -74,7 +74,7 @@
 		 */
 		public function __construct(UriInterface $uri = NULL, Collection $headers = NULL, Collection $params = NULL, CookieCollection $cookies = NULL, FileCollection $files = NULL)
 		{
-			$this->uri	   = $uri     ?: new Uri();
+			$this->uri	   = $uri     ?: new HTTP\URI();
 			$this->files   = $files   ?: new FileCollection();
 			$this->params  = $params  ?: new Collection();
 			$this->cookies = $cookies ?: new CookieCollection();
@@ -124,7 +124,7 @@
 		 */
 		public function getRequestTarget()
 		{
-			return $this->requestTarget ?: $this->getUri()->getPath() ?: '/';
+			return $this->target ?: $this->getUri()->getPath() ?: '/';
 		}
 
 
@@ -173,21 +173,6 @@
 		}
 
 
-		/**
-		 * Set the request target for this request
-		 *
-		 * @access public
-		 * @param string $target The request target to set
-		 * @return Request The object instance for method chaining
-		 * @link http://tools.ietf.org/html/rfc7230#section-2.7
-		 */
-		public function setRequestTarget($target)
-		{
-			$this->requestTarget = $target;
-
-			return $this;
-		}
-
 
 		/**
 		 * Return an instance with the specific request-target.
@@ -205,7 +190,7 @@
 		{
 			$new = clone $this;
 
-			$new->setRequestTarget($target);
+			$new->setTarget($target);
 
 			return $new;
 		}
