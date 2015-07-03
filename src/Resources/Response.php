@@ -6,8 +6,9 @@
 	use Dotink\Flourish\Collection;
 	use Dotink\Flourish;
 
+	use Psr\Http\Message\ResponseInterface;
 
-	class Response extends Resource\Response
+	class Response extends Resource\Response implements ResponseInterface
 	{
 		use HTTP\Message;
 
@@ -16,12 +17,6 @@
 		 *
 		 */
 		public $cookies = NULL;
-
-
-		/**
-		 *
-		 */
-		public $headers = NULL;
 
 
 		/**
@@ -110,8 +105,8 @@
 				$this->setStatus(static::$defaultStatus ?: 'Not Found');
 			}
 
-			$this->headers = $headers ?: new Collection();
 			$this->cookies = $cookies ?: new CookieCollection();
+			$this->headers = $headers ?: new Collection();
 		}
 
 

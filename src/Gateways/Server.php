@@ -26,22 +26,26 @@
 		 */
 		public function populate(HTTP\Resource\Request $request)
 		{
-			$request->headers = new Flourish\Collection($this->getHeaders());
-			$request->params  = new Flourish\Collection($this->getParams());
-
 			$request->files   = new HTTP\FileCollection($this->getFiles());
+			$request->params  = new Flourish\Collection($this->getParams());
 			$request->cookies = new HTTP\CookieCollection($this->getCookies());
+			$request->headers = new Flourish\Collection($this->getHeaders());
 
 			list($protocol, $version) = explode('/', $_SERVER['SERVER_PROTOCOL']);
 
 			$request->setMethod($_SERVER['REQUEST_METHOD']);
 			$request->setProtocol($protocol);
-			$request->setVersion($version);
+			$request->setProtocolVersion($version);
 		}
 
 
 		/**
+		 * Get the cookies from the SAPI interface
 		 *
+		 * In all cases, this will use the `$_COOKIE` superglobal to retrieve cookie values.
+		 *
+		 * @access public
+		 * @return array $cookies The array of cookie values (unwrapped) keyed by name
 		 */
 		public function getCookies()
 		{
@@ -113,21 +117,11 @@
 
 			http_response_code($response->getStatusCode());
 
-			$content = $response->get();
+			//
+			// TODO: handle streaming better
+			//
 
-			if (is_object($content)) {
-				if (!is_callable([$content, 'compose'])) {
-					throw new Flourish\ProgrammerException(
-						'Cannot transport object of type "%s", must have compose()',
-						get_class($content)
-					);
-				}
-
-				echo $content->compose();
-
-			} else {
-				echo $content;
-			}
+			echo $response->getBody();
 		}
 
 
