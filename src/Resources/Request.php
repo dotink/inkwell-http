@@ -124,6 +124,18 @@
 		 */
 		public function getRequestTarget()
 		{
+			return $this->getTarget();
+		}
+
+
+		/**
+		 * Get the routable target for the request
+		 *
+		 * @access public
+		 * @return string The routable target for the request
+		 */
+		public function getTarget()
+		{
 			return $this->target ?: $this->getUri()->getPath() ?: '/';
 		}
 

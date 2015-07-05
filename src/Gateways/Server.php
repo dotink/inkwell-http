@@ -70,7 +70,7 @@
 		 */
 		public function getFiles()
 		{
-			return $this->fixFiles($_FILES);
+			return $this->normalizeFiles($_FILES);
 		}
 
 
@@ -94,18 +94,13 @@
 
 			foreach ($_SERVER as $name => $value) {
 				if (substr($name, 0, 5) == 'HTTP_') {
-					$header = substr($name, 5);
-					$header = str_replace('_', ' ', $header);
-					$header = strtolower($header);
-					$header = ucwords($header);
-					$header = str_replace(' ', '-', $header);
-
-					$headers[$header] = $value;
+					$headers[$this->normalizeHeaderName($name)] = $value;
 				}
 			}
 
 			return $headers;
 		}
+
 
 		/**
 		 *
@@ -128,7 +123,7 @@
 		/**
 		 *
 		 */
-		private function fixFiles($data)
+		private function normalizeFiles($data)
 		{
 			if (!is_array($data)) {
 				return $data;
@@ -142,12 +137,12 @@
 
 			if ($file_keys != $data_keys) {
 				foreach ($data_keys as $name) {
-					$files[$name] = $this->fixFiles($data[$name]);
+					$files[$name] = $this->normalizeFiles($data[$name]);
 				}
 
 			} elseif (isset($data['name']) && is_array($data['name'])) {
 				foreach (array_keys($data['name']) as $name) {
-					$files[$name] = $this->fixFiles([
+					$files[$name] = $this->normalizeFiles([
 						'name'     => $data['name'][$name],
 						'type'     => $data['type'][$name],
 						'size'     => $data['size'][$name],
@@ -162,6 +157,21 @@
 
 
 			return $files;
+		}
+
+
+		/**
+		 *
+		 */
+		public function normalizeHeaderName($name)
+		{
+			$header = substr($name, 5);
+			$header = str_replace('_', ' ', $header);
+			$header = strtolower($header);
+			$header = ucwords($header);
+			$header = str_replace(' ', '-', $header);
+
+			return $header;
 		}
 
 
