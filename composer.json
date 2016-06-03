@@ -26,8 +26,7 @@
 		"dotink/flourish-core": "^1.0.0",
 		"dotink/flourish-collection": "^1.0.0",
 		"dotink/flourish-url": "^1.0.0",
-		"dotink/inkwell-transport": "^1.0.0",
-		"dotink/inkwell-framework": "^3.1.0"
+		"dotink/inkwell-transport": "^1.0.0"
 	},
 	"autoload": {
 		"classmap": ["src/"]
