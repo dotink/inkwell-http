@@ -29,18 +29,6 @@
 		}
 
 		//
-		// Handle JSON Encoding Output
-		//
-
-		$app['events']->on('Router::end', function($action, $data) {
-			$response = $data['response'];
-
-			if ($response->headers->get('Content-Type') == 'application/json') {
-					$response->set(json_encode($response->get()));
-			}
-		});
-
-		//
 		// Spin up our gateway and populate the request
 		//
 
