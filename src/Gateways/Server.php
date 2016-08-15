@@ -1,6 +1,7 @@
 <?php namespace Inkwell\HTTP\Gateway
 {
 	use Inkwell\HTTP;
+	use Inkwell\HTTP\Stream;
 	use Inkwell\Transport;
 	use Dotink\Flourish;
 
@@ -36,6 +37,14 @@
 			$request->setMethod($_SERVER['REQUEST_METHOD']);
 			$request->setProtocol($protocol);
 			$request->setProtocolVersion($version);
+
+			$input_stream = fopen('php://input', 'r');
+			$temp_stream  = fopen('php://temp',  'r+');
+
+			stream_copy_to_stream($input_stream, $temp_stream);
+			rewind($temp_stream);
+
+			$request->set(new Stream($temp_stream));
 		}
 
 
